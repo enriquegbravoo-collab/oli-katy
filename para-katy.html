@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para Katy 💗</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rosa:#FFD6E0; --lila:#E4D4F4; --celeste:#CDE7F5; --menta:#D5F0E1; --durazno:#FFE5CF;
+    --tinta:#5B4B6B; --boton:#F7A8C0;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{
+    font-family:'Nunito',sans-serif;color:var(--tinta);min-height:100vh;
+    background:linear-gradient(135deg,var(--rosa),var(--lila) 45%,var(--celeste));
+    background-attachment:fixed;
+  }
+  .page{display:none;min-height:100vh;padding:24px 16px;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center}
+  .page.activa{display:flex}
+  h1,h2{font-family:'Caveat',cursive;font-weight:700;line-height:1.1}
+  h1{font-size:clamp(2.2rem,7vw,3.6rem)}
+
+  /* ---------- Collage ---------- */
+  .collage{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:min(760px,100%)}
+  .foto{background:#fff;padding:8px 8px 26px;border-radius:6px;box-shadow:0 6px 16px rgba(91,75,107,.18);aspect-ratio:3/4;transition:transform .25s}
+  .foto:nth-child(3n+1){transform:rotate(-3deg)}
+  .foto:nth-child(3n+2){transform:rotate(2deg) translateY(10px)}
+  .foto:nth-child(3n){transform:rotate(-1.5deg)}
+  .foto:hover{transform:rotate(0) scale(1.05);z-index:2}
+  .foto img{width:100%;height:100%;object-fit:cover;border-radius:3px;display:block}
+  .foto .vacia{width:100%;height:100%;border-radius:3px;display:grid;place-items:center;font-size:2rem}
+
+  /* ---------- Botones ---------- */
+  button{font-family:inherit;border:0;cursor:pointer;color:#fff;background:var(--boton);
+    padding:12px 28px;border-radius:999px;font-size:1.1rem;font-weight:700;
+    box-shadow:0 4px 0 #e68aa8;transition:transform .15s}
+  button:hover{transform:translateY(-2px)}
+  button:focus-visible{outline:3px solid var(--tinta);outline-offset:3px}
+
+  /* ---------- Texto ---------- */
+  .tarjeta{background:rgba(255,255,255,.65);border-radius:28px;padding:32px 28px;max-width:560px;font-size:1.15rem;line-height:1.7}
+  .tarjeta p+p{margin-top:14px}
+
+  /* ---------- Pregunta ---------- */
+  .pregunta h2{font-size:clamp(2rem,6vw,3.2rem)}
+  .botones{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;min-height:90px}
+  #si{background:#9AD9B5;box-shadow:0 4px 0 #78bf97}
+  #no{background:#B9A6E3;box-shadow:0 4px 0 #9c88cc;transition:transform .3s}
+  #mensaje{font-family:'Caveat',cursive;font-size:clamp(1.8rem,5vw,2.6rem);display:none}
+</style>
+</head>
+<body>
+
+<!-- ===== PÁGINA 1: COLLAGE ===== -->
+<section class="page activa" id="p1">
+  <h1 id="titulo1"></h1>
+  <div class="collage" id="collage"></div>
+  <button onclick="ir(2)">Siguee </button>
+</section>
+
+<!-- ===== PÁGINA 2: TEXTO ===== -->
+<section class="page" id="p2">
+  <div class="tarjeta" id="texto"></div>
+  <button onclick="ir(3)">Sigue mi lov</button>
+</section>
+
+<!-- ===== PÁGINA 3: PREGUNTA ===== -->
+<section class="page pregunta" id="p3">
+  <h2>Eres lo mejor que me ha pasado 💗<br>¿Quieres ser mi polola, Katy?</h2>
+  <div class="botones" id="botones">
+    <button id="si">Sí 💖</button>
+    <button id="no">No</button>
+  </div>
+  <p id="mensaje"></p>
+</section>
+
+<script>
+/* =========================================================
+   ✏️ EDITA AQUÍ
+   ========================================================= */
+
+// Título de la primera página
+const TITULO = "algunas fotikoss";
+
+// Fotos del collage: pon aquí los nombres (o links) de tus fotos.
+// Si usas archivos, guárdalos en la misma carpeta que este HTML.
+const FOTOS = [
+  "WhatsApp Image 2026-10-06 at 01.22.52 (1).jpeg",
+  "WhatsApp Image 2026-10-06 at 01.22.52.jpeg",
+  "WhatsApp Image 2026-10-06 at 01.22.53 (3).jpeg",
+  "WhatsApp Image 2026-10-06 at 01.22.53 (1).jpeg",
+  "WhatsApp Image 2026-10-06 at 01.22.53.jpeg",
+  "WhatsApp Image 2026-10-06 at 01.22.53 (2).jpeg"
+];
+
+// Texto de la segunda página (cada elemento es un párrafo)
+const TEXTO = [
+  "Katy, desde que llegaste a mi vida todo se siente más bonito.",
+  "Me encanta tu risa, cómo me haces sentir y cada momento que pasamos juntos.",
+  "y no puedo seguir esperando"
+];
+
+// Link al que va el "Sí"
+const LINK_SI = "https://youtu.be/QLCpqdqeoII?si=wdd8_7WbaqHfEgjI";
+
+// Mensaje final cuando el "No" ya no puede achicarse más
+const MENSAJE_FINAL = "Dímelo en persona 😌 te amo muchito 💗";
+
+/* =========================================================
+   Código (no necesitas tocar lo de abajo)
+   ========================================================= */
+
+// Título + collage
+document.getElementById("titulo1").textContent = TITULO;
+const colores = ["#FFD6E0","#E4D4F4","#CDE7F5","#D5F0E1","#FFE5CF"];
+const collage = document.getElementById("collage");
+FOTOS.forEach((src, i) => {
+  const f = document.createElement("div");
+  f.className = "foto";
+  const img = new Image();
+  img.src = src;
+  img.alt = "Foto " + (i + 1);
+  img.onerror = () => {               // si no encuentra la foto, muestra un cuadro pastel
+    f.innerHTML = '<div class="vacia" style="background:' + colores[i % colores.length] + '">💗</div>';
+  };
+  f.appendChild(img);
+  collage.appendChild(f);
+});
+
+// Texto
+document.getElementById("texto").innerHTML = TEXTO.map(t => "<p>" + t + "</p>").join("");
+
+// Navegar entre páginas
+function ir(n){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("activa"));
+  document.getElementById("p" + n).classList.add("activa");
+  window.scrollTo(0, 0);
+}
+
+// Botón SÍ
+document.getElementById("si").addEventListener("click", () => {
+  window.location.href = LINK_SI;
+});
+
+// Botón NO: se achica en cada click hasta mostrar el mensaje final
+let escala = 1;
+const no = document.getElementById("no");
+no.addEventListener("click", () => {
+  escala -= 0.2;
+  if (escala > 0.15) {
+    no.style.transform = "scale(" + escala + ")";
+  } else {
+    no.style.display = "none";
+    const m = document.getElementById("mensaje");
+    m.textContent = MENSAJE_FINAL;
+    m.style.display = "block";
+  }
+});
+</script>
+</body>
+</html>
